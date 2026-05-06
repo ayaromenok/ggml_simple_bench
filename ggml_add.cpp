@@ -13,18 +13,18 @@
 #include <string>
 
 int main(int argc, char ** argv) {
-    ggml_type type = GGML_TYPE_F16;
-    std::string type_str = "f16";
+    ggml_type type = GGML_TYPE_F32;
+    std::string type_str = "f32";
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg == "-t" || arg == "--type") {
             if (++i < argc) {
                 std::string val = argv[i];
-                if (val == "f32") {
+                if (val == "f32"||val=="fp32") {
                     type = GGML_TYPE_F32;
                     type_str = "f32";
-                } else if (val == "f16") {
+                } else if (val == "f16"||val=="fp16") {
                     type = GGML_TYPE_F16;
                     type_str = "f16";
                 } else {
