@@ -15,9 +15,9 @@ Main use to determinate supported instructions on NVIDIA CMP (Cryptocurrency Min
 matrix 512x512x256(512MB), 4096 iteration
 mostly momory bound(A4)
 
-| card | fp16, GFLOPS | fp32,GFLOPS |
-|------|--------------|-------------|
-| A4 | 63.80 | 31.95 |
-| HX | 67.23 | 46.48 |
-| A4,oc |77.23 | 39.48 |
-| HX,oc |79.25 | 55.18 |
+| card | fp16, GFLOPS | fp32,GFLOPS | fp16/bandwidth | fp32/bandwidth | VRAM bandwidth |
+|------|--------------|-------------|----------------|----------------|----------------|
+| A4 | 63.80 | 31.95 | 382.8 | 373.52| 448 |
+| HX | 67.23 | 46.48 | 403.38 | 557.76 | 608.3 |
+| A4,oc |77.23 | 39.48 | 463.38 | 473.76 | todo |
+| HX,oc |79.25 | 55.18 | 475.5| 662.16 | todo |
