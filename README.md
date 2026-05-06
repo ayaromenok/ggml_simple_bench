@@ -7,8 +7,8 @@ Main use to determinate supported instructions on NVIDIA CMP (Cryptocurrency Min
 ### test hardware
 |chip|name|short name|
 |---|---|---|
-|(https://www.techpowerup.com/gpu-specs/?architecture=Ampere)[Ampere] (https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964)[GA104]|(https://www.techpowerup.com/gpu-specs/cmp-70hx.c3822)[NVIDIA CMP 70HX]| HX|
-|(https://www.techpowerup.com/gpu-specs/?architecture=Ampere)[Ampere] (https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964)[GA104]|(https://www.techpowerup.com/gpu-specs/rtx-a4000.c3756)[NVIDIA (Quadro) RTX A4000]| A4|
+|[https://www.techpowerup.com/gpu-specs/?architecture=Ampere](Ampere) [https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964](GA104)|[https://www.techpowerup.com/gpu-specs/cmp-70hx.c3822](NVIDIA CMP 70HX)| HX|
+|[https://www.techpowerup.com/gpu-specs/?architecture=Ampere](Ampere) [https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964](GA104)|[https://www.techpowerup.com/gpu-specs/rtx-a4000.c3756](NVIDIA Quadro RTX A4000)| A4|
 
 ### ggml_add
 
