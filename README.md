@@ -12,12 +12,12 @@ Main use to determinate supported instructions on NVIDIA CMP (Cryptocurrency Min
 
 ### ggml_add
 
-matrix 1024x1024x512, 1024 iteration
+matrix 512x512x256(512MB), 4096 iteration
 mostly momory bound(A4)
 
-|| card|| fp16, GFLOPS||fp32,GFLOPS||
-|---|----|---|
-|A4| 63.80| 31.95|
-|HX|67.23|46.48 |
-|A4,oc|77.23|39.48|
-|HX,oc|79.25|55.18|
+| card | fp16, GFLOPS | fp32,GFLOPS |
+|------|--------------|-------------|
+| A4 | 63.80 | 31.95 |
+| HX | 67.23 | 46.48 |
+| A4,oc |77.23 | 39.48 |
+| HX,oc |79.25 | 55.18 |
