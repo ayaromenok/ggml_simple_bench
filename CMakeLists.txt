@@ -28,10 +28,6 @@ set(GGML_LIBS
     CUDA::cudart
 )
 
-# GGML Add F16
-add_executable(ggml_add_fp16 ggml_add_fp16.cpp)
-target_link_libraries(ggml_add_fp16 ${GGML_LIBS})
-
-# GGML Add FP32
-add_executable(ggml_add_fp32 ggml_add_fp32.cpp)
-target_link_libraries(ggml_add_fp32 ${GGML_LIBS})
+# GGML Add (Unified)
+add_executable(ggml_add ggml_add.cpp)
+target_link_libraries(ggml_add ${GGML_LIBS})
