@@ -41,9 +41,9 @@ int main(int argc, char ** argv) {
         }
     }
 
-    const int nx = 1024;
-    const int ny = 1024;
-    const int nz = 512;
+    const int nx = 512;
+    const int ny = 512;
+    const int nz = 256;
 
     std::cout << "Running GGML CUDA Add benchmark (" << type_str << ")..." << std::endl;
 
@@ -152,13 +152,13 @@ int main(int argc, char ** argv) {
 
     // 7. Benchmark and execute
     if (type == GGML_TYPE_F16){
-        std::cout << "Starting benchmark FP16 (1024 iterations)..." << std::endl;
+        std::cout << "Starting benchmark FP16" << std::endl;
     } else {
-        std::cout << "Starting benchmark FP32 (1024 iterations)..." << std::endl;
+        std::cout << "Starting benchmark FP32" << std::endl;
     }
     auto start_time = std::chrono::high_resolution_clock::now();
     
-    const int iterations = 32;
+    const int iterations = 64;
     for (int i = 0; i < iterations; ++i) {
         for (int j = 0; j < iterations; ++j) {
             ggml_backend_graph_compute(backend, gf);
