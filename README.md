@@ -5,10 +5,10 @@ Main use to determinate supported instructions on NVIDIA CMP (Cryptocurrency Min
 
 
 ### test hardware
-|chip|name|short name|
-|---|---|---|
-|[Ampere](https://www.techpowerup.com/gpu-specs/?architecture=Ampere) [GA104](https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964) | [NVIDIA CMP 70HX](https://www.techpowerup.com/gpu-specs/cmp-70hx.c3822)| HX|
-|[Ampere](https://www.techpowerup.com/gpu-specs/?architecture=Ampere) [GA104](https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964) | [NVIDIA Quadro RTX A4000](https://www.techpowerup.com/gpu-specs/rtx-a4000.c3756)| A4|
+|chip|name|short name| fp16, GFLOPS | fp32,GFLOPS 
+|---|---|---|---|---|
+|[Ampere](https://www.techpowerup.com/gpu-specs/?architecture=Ampere) [GA104](https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964) | [NVIDIA CMP 70HX](https://www.techpowerup.com/gpu-specs/cmp-70hx.c3822)| HX | 10 710 |  10 710 | 
+|[Ampere](https://www.techpowerup.com/gpu-specs/?architecture=Ampere) [GA104](https://www.techpowerup.com/gpu-specs/nvidia-ga104.g964) | [NVIDIA Quadro RTX A4000](https://www.techpowerup.com/gpu-specs/rtx-a4000.c3756)| A4 | 19 170 | 19 170 |
 
 ### ggml_add
 
