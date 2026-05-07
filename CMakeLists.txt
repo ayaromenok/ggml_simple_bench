@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(ggml_cuda_add LANGUAGES C CXX)
+project(ggml_bench LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -28,6 +28,10 @@ set(GGML_LIBS
     CUDA::cudart
 )
 
-# GGML Add (Unified)
-add_executable(ggml_add ggml_add.cpp common.cpp)
-target_link_libraries(ggml_add ${GGML_LIBS})
+# GGML Bench
+add_executable(ggml_bench 
+    ggml_bench.cpp 
+    common.cpp 
+    benchmark.cpp
+)
+target_link_libraries(ggml_bench ${GGML_LIBS})

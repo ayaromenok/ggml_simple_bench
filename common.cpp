@@ -4,7 +4,7 @@
 #include <string>
 
 void benchmark_params_print_usage(char ** argv) {
-    fprintf(stderr, "Usage: %s [-t|--type f16|f32] [-ms|--matrix-size size]\n", argv[0]);
+    fprintf(stderr, "Usage: %s [-t|--type f16|f32] [-ms|--matrix-size size] [-o|--operator add|sub|mul|div]\n", argv[0]);
 }
 
 bool benchmark_params_parse(int argc, char ** argv, benchmark_params & params) {
@@ -37,12 +37,41 @@ bool benchmark_params_parse(int argc, char ** argv, benchmark_params & params) {
                 fprintf(stderr, "error: %s requires an argument\n", arg.c_str());
                 return false;
             }
+        } else if (arg == "-o" || arg == "--operator") {
+            if (++i < argc) {
+                std::string val = argv[i];
+                if (val == "add") {
+                    params.op = benchmark_op::ADD;
+                } else if (val == "sub") {
+                    params.op = benchmark_op::SUB;
+                } else if (val == "mul") {
+                    params.op = benchmark_op::MUL;
+                } else if (val == "div") {
+                    params.op = benchmark_op::DIV;
+                } else {
+                    fprintf(stderr, "error: unknown operator '%s'\n", val.c_str());
+                    return false;
+                }
+            } else {
+                fprintf(stderr, "error: %s requires an argument\n", arg.c_str());
+                return false;
+            }
         } else {
             benchmark_params_print_usage(argv);
             return false;
         }
     }
     return true;
+}
+
+std::string benchmark_params_get_op_str(const benchmark_params & params) {
+    switch (params.op) {
+        case benchmark_op::ADD: return "add";
+        case benchmark_op::SUB: return "sub";
+        case benchmark_op::MUL: return "mul";
+        case benchmark_op::DIV: return "div";
+        default: return "unknown";
+    }
 }
 
 std::string benchmark_params_get_type_str(const benchmark_params & params) {
