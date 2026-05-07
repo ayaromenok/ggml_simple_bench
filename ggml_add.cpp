@@ -16,6 +16,7 @@ int main(int argc, char ** argv) {
     ggml_type type = GGML_TYPE_F32;
     std::string type_str = "f32";
 
+    int matrix_size = 256;
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg == "-t" || arg == "--type") {
@@ -35,17 +36,27 @@ int main(int argc, char ** argv) {
                 fprintf(stderr, "error: %s requires an argument\n", arg.c_str());
                 return 1;
             }
+        } else if (arg == "-ms" || arg == "--matrix-size") {
+            if (++i < argc) {
+                matrix_size = std::stoi(argv[i]);
+            } else {
+                fprintf(stderr, "error: %s requires an argument\n", arg.c_str());
+                return 1;
+            }
         } else {
-            fprintf(stderr, "Usage: %s [-t|--type f16|f32]\n", argv[0]);
+            fprintf(stderr, "Usage: %s [-t|--type f16|f32] [-ms|--matrix-size size]\n", argv[0]);
             return 1;
         }
     }
 
-    const int nx = 256 ;
-    const int ny = 256;
-    const int nz = 256;
+    const int nx = matrix_size;
+    const int ny = matrix_size;
+    const int nz = matrix_size;
 
-    std::cout << "Running GGML CUDA Add benchmark (" << type_str << ")..." << std::endl;
+    const long long target_total_ops = 274877906944LL; // 256^3 * 16384
+    const int iterations = std::max(1LL, target_total_ops / ((long long)nx * ny * nz));
+
+    std::cout << "Running GGML CUDA Add benchmark (" << type_str << ", size " << matrix_size << "^3, iterations " << iterations << ")..." << std::endl;
 
     size_t ctx_size = 0;
     {
@@ -84,7 +95,8 @@ int main(int argc, char ** argv) {
         fprintf(stderr, "ggml_backend_alloc_ctx_tensors() failed\n");
         return 1;
     }
-    std::cout << "Allocated:" << sizeof(type)*nx*ny*nz*3/(1024*1024) << " MB" << std::endl;
+    const long long ggml_overhead = 163; //MB, measured. values between 160 and 163 were observed.
+    std::cout << "Allocated:" << (long long)ggml_type_size(type)*nx*ny*nz*3/(1024*1024) + ggml_overhead << " MB" << std::endl; 
 
     // 5. Fill tensors with random values (Parallel)
     size_t total_elements = (size_t)nx * ny * nz;
@@ -159,7 +171,6 @@ int main(int argc, char ** argv) {
     }
     auto start_time = std::chrono::high_resolution_clock::now();
     
-    const int iterations = 16384;
     for (int i = 0; i < iterations; ++i) {
         ggml_backend_graph_compute(backend, gf);        
     }
