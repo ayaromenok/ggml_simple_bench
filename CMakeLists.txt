@@ -29,5 +29,5 @@ set(GGML_LIBS
 )
 
 # GGML Add (Unified)
-add_executable(ggml_add ggml_add.cpp)
+add_executable(ggml_add ggml_add.cpp common.cpp)
 target_link_libraries(ggml_add ${GGML_LIBS})

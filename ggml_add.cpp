@@ -3,6 +3,7 @@
 #include "ggml-backend.h"
 #include "ggml-cuda.h"
 
+#include "common.h"
 #include <iostream>
 #include <vector>
 #include <random>
@@ -13,41 +14,14 @@
 #include <string>
 
 int main(int argc, char ** argv) {
-    ggml_type type = GGML_TYPE_F32;
-    std::string type_str = "f32";
-
-    int matrix_size = 256;
-    for (int i = 1; i < argc; ++i) {
-        std::string arg = argv[i];
-        if (arg == "-t" || arg == "--type") {
-            if (++i < argc) {
-                std::string val = argv[i];
-                if (val == "f32"||val=="fp32") {
-                    type = GGML_TYPE_F32;
-                    type_str = "f32";
-                } else if (val == "f16"||val=="fp16") {
-                    type = GGML_TYPE_F16;
-                    type_str = "f16";
-                } else {
-                    fprintf(stderr, "error: unknown type '%s'\n", val.c_str());
-                    return 1;
-                }
-            } else {
-                fprintf(stderr, "error: %s requires an argument\n", arg.c_str());
-                return 1;
-            }
-        } else if (arg == "-ms" || arg == "--matrix-size") {
-            if (++i < argc) {
-                matrix_size = std::stoi(argv[i]);
-            } else {
-                fprintf(stderr, "error: %s requires an argument\n", arg.c_str());
-                return 1;
-            }
-        } else {
-            fprintf(stderr, "Usage: %s [-t|--type f16|f32] [-ms|--matrix-size size]\n", argv[0]);
-            return 1;
-        }
+    benchmark_params bparams;
+    if (!benchmark_params_parse(argc, argv, bparams)) {
+        return 1;
     }
+
+    const ggml_type type = bparams.type;
+    const std::string type_str = benchmark_params_get_type_str(bparams);
+    const int matrix_size = bparams.matrix_size;
 
     const int nx = matrix_size;
     const int ny = matrix_size;
