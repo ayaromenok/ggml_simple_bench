@@ -41,8 +41,8 @@ int main(int argc, char ** argv) {
         }
     }
 
-    const int nx = 512;
-    const int ny = 512;
+    const int nx = 256 ;
+    const int ny = 256;
     const int nz = 256;
 
     std::cout << "Running GGML CUDA Add benchmark (" << type_str << ")..." << std::endl;
@@ -84,17 +84,18 @@ int main(int argc, char ** argv) {
         fprintf(stderr, "ggml_backend_alloc_ctx_tensors() failed\n");
         return 1;
     }
+    std::cout << "Allocated:" << sizeof(type)*nx*ny*nz*3/(1024*1024) << " MB" << std::endl;
 
     // 5. Fill tensors with random values (Parallel)
     size_t total_elements = (size_t)nx * ny * nz;
     std::vector<char> h_a_raw(ggml_nbytes(a));
     std::vector<char> h_b_raw(ggml_nbytes(b));
 
-    std::cout << "Filling matrices with 16 predefined values (parallel on CPU)..." << std::endl;
+    std::cout << "Filling matrices with 16 predefined values (on CPU)..." << std::endl;
 
     unsigned int num_threads = std::thread::hardware_concurrency();
     if (num_threads == 0) num_threads = 4;
-    
+       
     std::vector<std::thread> threads;
     size_t chunk_size = (total_elements + num_threads - 1) / num_threads;
 
@@ -158,22 +159,20 @@ int main(int argc, char ** argv) {
     }
     auto start_time = std::chrono::high_resolution_clock::now();
     
-    const int iterations = 64;
+    const int iterations = 16384;
     for (int i = 0; i < iterations; ++i) {
-        for (int j = 0; j < iterations; ++j) {
-            ggml_backend_graph_compute(backend, gf);
-        }
-        std::cout<<".";
+        ggml_backend_graph_compute(backend, gf);        
     }
     std::cout<<std::endl;
     
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> duration = end_time - start_time;
 
-    double avg_time_ms = duration.count() / (iterations * iterations);
-    double total_ops = (double)nx * ny * nz;
+    double avg_time_ms = duration.count() / iterations;
+    double total_ops = (double)nx * ny * nz * iterations;
     double gflops = (total_ops / (avg_time_ms / 1000.0)) / 1000000000.0;
 
+    std::cout << "Total time: " << duration.count() << " ms" << std::endl;
     std::cout << "Average time per addition: " << avg_time_ms << " ms" << std::endl;
     std::cout << "Performance: " << std::fixed << std::setprecision(2) << gflops << " GFLOPS" << std::endl;
 
