@@ -169,7 +169,7 @@ int main(int argc, char ** argv) {
     std::chrono::duration<double, std::milli> duration = end_time - start_time;
 
     double avg_time_ms = duration.count() / iterations;
-    double total_ops = (double)nx * ny * nz * iterations;
+    double total_ops = (double)nx * ny * nz;
     double gflops = (total_ops / (avg_time_ms / 1000.0)) / 1000000000.0;
 
     std::cout << "Total time: " << duration.count() << " ms" << std::endl;
