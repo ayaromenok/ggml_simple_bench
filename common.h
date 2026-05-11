@@ -13,6 +13,7 @@ enum class benchmark_op {
 struct benchmark_params {
     ggml_type type = GGML_TYPE_F32;
     int matrix_size = 256;
+    int matrix_type = 3;
     benchmark_op op = benchmark_op::ADD;
 };
 

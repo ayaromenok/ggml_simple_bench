@@ -18,15 +18,19 @@ void run_benchmark(const benchmark_params & bparams) {
     const std::string type_str = benchmark_params_get_type_str(bparams);
     const std::string op_str = benchmark_params_get_op_str(bparams);
     const int matrix_size = bparams.matrix_size;
+    const int matrix_type = bparams.matrix_type;
 
-    const int nx = matrix_size;
-    const int ny = matrix_size;
-    const int nz = matrix_size;
+    int nx = matrix_size;
+    int ny = 1;
+    int nz = 1;
+
+    if (matrix_type >= 2) ny = matrix_size;
+    if (matrix_type >= 3) nz = matrix_size;
 
     const long long target_total_ops = 274877906944LL; // 256^3 * 16384
     const int iterations = std::max(1LL, target_total_ops / ((long long)nx * ny * nz));
 
-    std::cout << "Running GGML CUDA benchmark (" << op_str << ", " << type_str << ", size " << matrix_size << "^3, iterations " << iterations << ")..." << std::endl;
+    std::cout << "Running GGML CUDA benchmark (" << op_str << ", " << type_str << ", type " << matrix_type << "D, size " << matrix_size << (matrix_type == 1 ? "" : (matrix_type == 2 ? "^2" : "^3")) << ", iterations " << iterations << ")..." << std::endl;
 
     size_t ctx_size = 0;
     {
@@ -44,8 +48,19 @@ void run_benchmark(const benchmark_params & bparams) {
     struct ggml_context * ctx = ggml_init(params);
 
     // 2. Create tensors
-    struct ggml_tensor * a = ggml_new_tensor_3d(ctx, type, nx, ny, nz);
-    struct ggml_tensor * b = ggml_new_tensor_3d(ctx, type, nx, ny, nz);
+    struct ggml_tensor * a = nullptr;
+    struct ggml_tensor * b = nullptr;
+
+    if (matrix_type == 1) {
+        a = ggml_new_tensor_1d(ctx, type, nx);
+        b = ggml_new_tensor_1d(ctx, type, nx);
+    } else if (matrix_type == 2) {
+        a = ggml_new_tensor_2d(ctx, type, nx, ny);
+        b = ggml_new_tensor_2d(ctx, type, nx, ny);
+    } else {
+        a = ggml_new_tensor_3d(ctx, type, nx, ny, nz);
+        b = ggml_new_tensor_3d(ctx, type, nx, ny, nz);
+    }
     struct ggml_tensor * c = nullptr;
 
     switch (bparams.op) {

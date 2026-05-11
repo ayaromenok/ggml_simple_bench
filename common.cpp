@@ -4,7 +4,7 @@
 #include <string>
 
 void benchmark_params_print_usage(char ** argv) {
-    fprintf(stderr, "Usage: %s [-t|--type f16|f32] [-ms|--matrix-size size] [-o|--operator add|sub|mul|div]\n", argv[0]);
+    fprintf(stderr, "Usage: %s [-t|--type f16|f32] [-ms|--matrix-size size] [-mt|--matrix-type 1|2|3] [-o|--operator add|sub|mul|div]\n", argv[0]);
 }
 
 bool benchmark_params_parse(int argc, char ** argv, benchmark_params & params) {
@@ -31,6 +31,22 @@ bool benchmark_params_parse(int argc, char ** argv, benchmark_params & params) {
                     params.matrix_size = std::stoi(argv[i]);
                 } catch (const std::exception & e) {
                     fprintf(stderr, "error: invalid matrix size '%s'\n", argv[i]);
+                    return false;
+                }
+            } else {
+                fprintf(stderr, "error: %s requires an argument\n", arg.c_str());
+                return false;
+            }
+        } else if (arg == "-mt" || arg == "--matrix-type") {
+            if (++i < argc) {
+                try {
+                    params.matrix_type = std::stoi(argv[i]);
+                    if (params.matrix_type < 1 || params.matrix_type > 3) {
+                        fprintf(stderr, "error: matrix type must be 1, 2, or 3\n");
+                        return false;
+                    }
+                } catch (const std::exception & e) {
+                    fprintf(stderr, "error: invalid matrix type '%s'\n", argv[i]);
                     return false;
                 }
             } else {
